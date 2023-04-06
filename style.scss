@@ -1,0 +1,21 @@
+.app{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #D04F4F;
+}
+
+.menu-dropdown{
+    display: flex;
+    margin-top: 20px;
+
+    .dropdown{
+        margin-right: 20px;
+    }
+}
