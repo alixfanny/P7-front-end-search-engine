@@ -1,23 +1,92 @@
-.app {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 header {
-  display: flex;
+  color: #D04F4F;
+  margin-bottom: 20px;
   flex-direction: column;
   align-items: center;
-  color: #D04F4F;
+}
+header .logo {
+  width: 4%;
+  height: 4%;
+}
+header h1 {
+  text-align: center;
+}
+
+.conteneur-navbar {
+  margin: 0px !important;
+}
+
+.navbar {
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+.navbar .navbar-brand {
+  opacity: 25%;
+  font-size: 18px;
 }
 
 .menu-dropdown {
-  display: flex;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .menu-dropdown .dropdown {
   margin-right: 20px;
 }
 .menu-dropdown .dropdown-toggle {
   color: white;
+}
+
+.tag {
+  background: aliceblue;
+  width: 107px;
+  text-align: center;
+  border-radius: 5px;
+  color: white;
+}
+
+.recipe {
+  max-height: 400px;
+  height: 400px !important;
+  border-radius: 0px 0px 5px 5px;
+}
+.recipe .img-recipe {
+  border-radius: 5px 5px 0px 0px;
+  max-height: 178px;
+}
+.recipe .card-body {
+  background: #E7E7E7;
+  border-radius: 0px 0px 5px 5px;
+  height: 190px;
+  text-overflow: ellipsis;
+}
+.recipe .card-body .content-title {
+  align-items: baseline;
+  padding: 20px 20px 0px 20px;
+}
+.recipe .card-body .content-title h3 {
+  font-size: 18px;
+  font-weight: 400;
+}
+.recipe .card-body .content-title .content-icon {
+  align-items: baseline;
+}
+.recipe .card-body .content-title .content-icon .time {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 10px;
+}
+.recipe .card-body .content-description {
+  padding: 0px 20px 0px 20px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 110px;
+}
+.recipe .card-body .content-description .ingredients {
+  flex: 1;
+  font-size: 12px;
+}
+.recipe .card-body .content-description .description {
+  flex: 1;
+  font-size: 12px;
+  white-space: normal;
 }/*# sourceMappingURL=style.css.map */
