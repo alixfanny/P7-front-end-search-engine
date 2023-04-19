@@ -25,9 +25,9 @@
                 <section>
                     <div class="conteneur-navbar row justify-content-center">
                         <nav class="navbar" style="background-color: #E7E7E7">
-                            <div class="container-fluid">
-                            <span class="navbar-brand mb-0 h1">Rechercher une recette</span>
-                            <span class="fa-solid fa-magnifying-glass"></span>
+                            <div class="input-group d-flex">
+                            <input type="text" class="form-control" placeholder="Rechercher une recette" aria-label="Rechercher une recette" aria-describedby="basic-addon1">
+                            <span class="input-group-text fa-solid fa-magnifying-glass" id="basic-addon1"></span>
                             </div>
                         </nav>
                     </div>
@@ -44,7 +44,7 @@
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #3282f7">
                                     Ingredients
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" id="dropdown_menu_ingredients" style="background-color: #3282f7" >
                                 
                                 </ul>
                             </div>
@@ -53,7 +53,7 @@
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #68D9A4">
                                     Appareils
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" id="dropdown_menu_appliance" style="background-color: #68D9A4">
                                 
                                 </ul>
                             </div>
@@ -62,7 +62,7 @@
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #ED6454">
                                     Ustensiles
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu" id="dropdown_menu_ustensils" style="background-color: #ED6454">
                                 
                                 </ul>
                             </div>

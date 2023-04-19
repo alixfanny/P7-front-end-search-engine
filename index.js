@@ -8,12 +8,28 @@ async function getRecipes() {
 
 function displayData(recipes) {
     const recipesSection = document.querySelector(".container-recette");
+    const dropdownMenuIngredients = document.getElementById("dropdown_menu_ingredients");
+    const dropdownMenuAppliance = document.getElementById("dropdown_menu_appliance");
+    const dropdownMenuUstensils = document.getElementById("dropdown_menu_ustensils");
 
     recipes.forEach((recipe) => {
         const domRecipe = recipeFactory(recipe);
         const userCardDOM = domRecipe.getUserCardDOM();
         recipesSection.appendChild(userCardDOM);
+
+        const domDropdownIngredients = dropdownFactory(recipe);
+        const dropdownCardDomIngredients = domDropdownIngredients.getDropdownIngredients();
+        dropdownMenuIngredients.appendChild(dropdownCardDomIngredients);
+
+        const domDropdownAppliance = dropdownFactory(recipe);
+        const dropdownCardDomAppliance = domDropdownAppliance.getDropdownAppliance();
+        dropdownMenuAppliance.appendChild(dropdownCardDomAppliance);
+
+        const domDropdownUstensils = dropdownFactory(recipe);
+        const dropdownCardDomnUstensils = domDropdownUstensils.getDropdownUstensils();
+        dropdownMenuUstensils.appendChild(dropdownCardDomnUstensils);
     });
+    
 };
 
 async function init() {
@@ -25,7 +41,7 @@ async function init() {
 init();
 
 function recipeFactory(data) {
-    const {id, name, description, ingredients, time, portrait } = data;
+    const {id, name, description, ingredients, time, portrait} = data;
     const picture = `media/${portrait}`;
 
     function getUserCardDOM() {
@@ -98,9 +114,43 @@ function recipeFactory(data) {
         divIconTime.appendChild(pTime);
         divDescription.appendChild(pIngredients);
         divDescription.appendChild(pDescription);
-        return (article);
+        return article;
     }
-    
     return {getUserCardDOM}
 }
+
+function dropdownFactory(data){
+    const {ingredients, appliance, ustensils} = data;
+
+    function getDropdownIngredients() {
+        const divIngredients = document.createElement( 'div' );
+        ingredients.forEach(function(ingredient){
+            const liIngredient = document.createElement('li');
+            liIngredient.textContent = ingredient.ingredient; 
+            divIngredients.appendChild(liIngredient);
+        })
+        divIngredients.classList.add('ingredients-menu');
+       return divIngredients;
+    }
+
+    function getDropdownAppliance() {
+        const liAppliance = document.createElement( 'li' );
+        liAppliance.textContent = appliance;
+        liAppliance.classList.add('appliance-menu');
+       return liAppliance;
+    }
+
+    function getDropdownUstensils() {
+        const divUstensils = document.createElement( 'div' );
+        ustensils.forEach(function(ustensil){
+            const liUstensil = document.createElement('li');
+            liUstensil.textContent = ustensil; 
+            divUstensils.appendChild(liUstensil);
+        })
+        divUstensils.classList.add('ustensils-menu');
+       return divUstensils
+    }
+    return{getDropdownIngredients, getDropdownAppliance, getDropdownUstensils}
+}
+
 

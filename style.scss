@@ -22,9 +22,18 @@ header{
     margin-bottom: 20px;
     border-radius: 5px;
 
-    .navbar-brand{
-        opacity: 25%;
-        font-size: 18px;
+    .input-group{
+        align-items: baseline;
+        
+        .form-control{
+            border: none;
+            background: #E7E7E7;
+        }
+
+        #basic-addon1{
+            border: none;
+            background: #E7E7E7;
+        }
     }
 }
 
@@ -34,11 +43,15 @@ header{
 
     .dropdown{
         margin-right: 20px;
-    }
 
-    .dropdown-toggle{
-        color: white;
+        .dropdown-toggle{
+            color: white;
+        }
     }
+}
+
+#dropdown_menu_ingredients{
+    background-color: #3282f7;
 }
 
 .tag{
@@ -106,5 +119,4 @@ header{
             }
         }
     }
-
 }
