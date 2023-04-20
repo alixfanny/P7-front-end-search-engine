@@ -6,39 +6,54 @@ async function getRecipes() {
 
 }
 
+let allIngredients = [];
+let allAppliances = [];
+let allUstensils = [];
+
 function displayData(recipes) {
     const recipesSection = document.querySelector(".container-recette");
-    const dropdownMenuIngredients = document.getElementById("dropdown_menu_ingredients");
-    const dropdownMenuAppliance = document.getElementById("dropdown_menu_appliance");
-    const dropdownMenuUstensils = document.getElementById("dropdown_menu_ustensils");
 
     recipes.forEach((recipe) => {
         const domRecipe = recipeFactory(recipe);
         const userCardDOM = domRecipe.getUserCardDOM();
         recipesSection.appendChild(userCardDOM);
-
-        const domDropdownIngredients = dropdownFactory(recipe);
-        const dropdownCardDomIngredients = domDropdownIngredients.getDropdownIngredients();
-        dropdownMenuIngredients.appendChild(dropdownCardDomIngredients);
-
-        const domDropdownAppliance = dropdownFactory(recipe);
-        const dropdownCardDomAppliance = domDropdownAppliance.getDropdownAppliance();
-        dropdownMenuAppliance.appendChild(dropdownCardDomAppliance);
-
-        const domDropdownUstensils = dropdownFactory(recipe);
-        const dropdownCardDomnUstensils = domDropdownUstensils.getDropdownUstensils();
-        dropdownMenuUstensils.appendChild(dropdownCardDomnUstensils);
     });
-    
+
+    recipes.forEach((recipe) => {
+        recipe.ingredients.forEach((ingredient) => {
+           if(!allIngredients.includes(ingredient.ingredient)){
+            allIngredients.push(ingredient.ingredient)
+           }
+        })
+        return allIngredients
+    });
+
+    recipes.forEach((recipe) => {
+        if(!allAppliances.includes(recipe.appliance)){
+            allAppliances.push(recipe.appliance)
+        }
+        return allAppliances
+    });
+
+    recipes.forEach((recipe) => {
+        recipe.ustensils.forEach((ustensil) => {
+           if(!allUstensils.includes(ustensil)){
+            allUstensils.push(ustensil)
+           }
+        })
+        return allUstensils
+    })
 };
 
 async function init() {
 
     const recipes  = await getRecipes();
     displayData(recipes);
+    afficheMenuDropdown(allIngredients, allAppliances, allUstensils)
 };
 
 init();
+afficheMenuDropdown();
 
 function recipeFactory(data) {
     const {id, name, description, ingredients, time, portrait} = data;
@@ -119,38 +134,29 @@ function recipeFactory(data) {
     return {getUserCardDOM}
 }
 
-function dropdownFactory(data){
-    const {ingredients, appliance, ustensils} = data;
+function afficheMenuDropdown(allIngredients, allAppliances, allUstensils){
+    const ulIngredient = document.getElementById("dropdown_menu_ingredients");
+    const ulAppliance = document.getElementById("dropdown_menu_appliance");
+    const ulUstensil = document.getElementById("dropdown_menu_ustensils");
 
-    function getDropdownIngredients() {
-        const divIngredients = document.createElement( 'div' );
-        ingredients.forEach(function(ingredient){
-            const liIngredient = document.createElement('li');
-            liIngredient.textContent = ingredient.ingredient; 
-            divIngredients.appendChild(liIngredient);
-        })
-        divIngredients.classList.add('ingredients-menu');
-       return divIngredients;
-    }
+    allIngredients.forEach((ingredient) => {
+        const liIngredient = document.createElement('li');
+        liIngredient.textContent = ingredient;
+        liIngredient.classList.add("item")
+        ulIngredient.appendChild(liIngredient);
+    });
 
-    function getDropdownAppliance() {
-        const liAppliance = document.createElement( 'li' );
+    allAppliances.forEach((appliance) => {
+        const liAppliance = document.createElement('li');
         liAppliance.textContent = appliance;
-        liAppliance.classList.add('appliance-menu');
-       return liAppliance;
-    }
+        liAppliance.classList.add("item")
+        ulAppliance.appendChild(liAppliance);
+    });
 
-    function getDropdownUstensils() {
-        const divUstensils = document.createElement( 'div' );
-        ustensils.forEach(function(ustensil){
-            const liUstensil = document.createElement('li');
-            liUstensil.textContent = ustensil; 
-            divUstensils.appendChild(liUstensil);
-        })
-        divUstensils.classList.add('ustensils-menu');
-       return divUstensils
-    }
-    return{getDropdownIngredients, getDropdownAppliance, getDropdownUstensils}
+    allUstensils.forEach((ustensil) => {
+        const liUstensil = document.createElement('li');
+        liUstensil.textContent = ustensil;
+        liUstensil.classList.add("item")
+        ulUstensil.appendChild(liUstensil);
+    });
 }
-
-

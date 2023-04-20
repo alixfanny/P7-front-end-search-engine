@@ -50,9 +50,15 @@ header{
     }
 }
 
-#dropdown_menu_ingredients{
-    background-color: #3282f7;
+.dropdown-search-field{
+    border: none;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
 
 .tag{
     background: aliceblue;
