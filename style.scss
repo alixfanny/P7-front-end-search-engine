@@ -46,6 +46,21 @@ header{
 
         .dropdown-toggle{
             color: white;
+            align-items: center;
+
+            .activated{
+                display: none;
+            }
+
+            &.show{
+                .activated{
+                    display: block;
+                }
+
+                .desactivated{
+                    display: none;
+                }
+            }
         }
     }
 }
@@ -54,10 +69,16 @@ header{
     border: none;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.dropdown-menu.show {
+    display: grid !important;
+    grid-template-columns: 200px 200px 200px;
     grid-gap: 10px;
+    padding: 10px;
+    color: white;
+
+    li{
+        cursor: pointer;
+    }
   }
 
 .tag{

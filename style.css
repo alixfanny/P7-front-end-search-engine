@@ -40,16 +40,31 @@ header h1 {
 }
 .menu-dropdown .dropdown .dropdown-toggle {
   color: white;
+  align-items: center;
+}
+.menu-dropdown .dropdown .dropdown-toggle .activated {
+  display: none;
+}
+.menu-dropdown .dropdown .dropdown-toggle.show .activated {
+  display: block;
+}
+.menu-dropdown .dropdown .dropdown-toggle.show .desactivated {
+  display: none;
 }
 
 .dropdown-search-field {
   border: none;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.dropdown-menu.show {
+  display: grid !important;
+  grid-template-columns: 200px 200px 200px;
   grid-gap: 10px;
+  padding: 10px;
+  color: white;
+}
+.dropdown-menu.show li {
+  cursor: pointer;
 }
 
 .tag {

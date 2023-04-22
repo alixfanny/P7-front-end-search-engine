@@ -41,16 +41,26 @@
                     <section class="main-index-sort-inputs-container row justify-content-center">
                         <div class="menu-dropdown d-flex">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #3282f7">
-                                    <input class="dropdown-search-field" placeholder="Ingrédients" style="background-color: #3282f7">
+                                <button class="btn dropdown-toggle d-flex" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #3282f7">
+
+                                    <div class="activated">
+                                        <input class="dropdown-search-field" id="input-group-ingredient" type="text" style="background-color: #3282f7">
+                                    </div>
+
+                                    <div class="desactivated">
+                                        <label for="input-group-ingredient">Ingrédients </label>
+                                    </div>
+                                    
                                 </button>
-                                <ul class="dropdown-menu grid-container" id="dropdown_menu_ingredients" style="background-color: #3282f7" >
+                                <ul class="dropdown-menu grid-container " id="dropdown_menu_ingredients" style="background-color: #3282f7" >
                                 </ul>
                             </div>
 
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #68D9A4">
-                                    <input class="dropdown-search-field" placeholder="Appareils" style="background-color: #68D9A4">
+                                    <label for="input-group-appliance">Appareils
+                                        <input class="dropdown-search-field" id="input-group-appliance" type="text" style="background-color: #68D9A4">
+                                    </label>
                                 </button>
                                 <ul class="dropdown-menu grid-container" id="dropdown_menu_appliance" style="background-color: #68D9A4">
                                 </ul>
@@ -58,7 +68,9 @@
 
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #ED6454">
-                                    <input class="dropdown-search-field" placeholder="Ustensiles" style="background-color: #ED6454">
+                                    <label for="input-group-ustensil">Ustensiles
+                                        <input class="dropdown-search-field" id="input-group-ustensil" type="text" style="background-color: #ED6454">
+                                    </label>
                                 </button>
                                 <ul class="dropdown-menu grid-container" id="dropdown_menu_ustensils" style="background-color: #ED6454"> </ul>
                             </div>
