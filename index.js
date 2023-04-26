@@ -2,12 +2,18 @@ let recipes = [];
 let allIngredients = [];
 let allAppliances = [];
 let allUstensils = [];
+let filters = {
+    appliance: "",
+    ingredients: [],
+    ustensils: [],
+}
 
 async function init() {
     const recipes = await getRecipes();
     displayData(recipes);
     afficheMenuDropdown();
-    choiceKeyWordsAppliance();
+    valueKeyWord();
+    filterRecipes();
 }
 
 init();
@@ -145,8 +151,9 @@ function afficheMenuDropdown(){
             numberMax ++;
             const liIngredient = document.createElement('li');
             liIngredient.textContent = ingredient;
-            liIngredient.setAttribute("value", ingredient);
-            liIngredient.classList.add("item-ingredient")
+            liIngredient.setAttribute("data-value", ingredient);
+            liIngredient.setAttribute("data-type", "ingredient");
+            liIngredient.classList.add("item")
             ulIngredient.appendChild(liIngredient);
         }
     });
@@ -155,30 +162,75 @@ function afficheMenuDropdown(){
         const liAppliance = document.createElement('li');
         liAppliance.textContent = appliance;
         liAppliance.setAttribute("data-value", appliance);
-        liAppliance.classList.add("item-appliance")
+        liAppliance.setAttribute("data-type", "appareil");
+        liAppliance.classList.add("item")
         ulAppliance.appendChild(liAppliance);
     });
 
     allUstensils.forEach((ustensil) => {
         const liUstensil = document.createElement('li');
         liUstensil.textContent = ustensil;
-        liUstensil.setAttribute("value", ustensil);
-        liUstensil.classList.add("item-ustensil")
+        liUstensil.setAttribute("data-value", ustensil);
+        liUstensil.setAttribute("data-type", "ustensil");
+        liUstensil.classList.add("item")
         ulUstensil.appendChild(liUstensil);
     });
 }
 
-function choiceKeyWordsAppliance() {
-    let keyWords = document.querySelectorAll(".item-appliance");
+function filterRecipes() {
+    const filteredRecipes = recipes.filter(recipe => {
+        if(filters.appliance !== "" && recipe.appliance !== filters.appliance) {
+            return false;
+        }
 
-    keyWords.forEach((element) => {
-        element.addEventListener("click", function(event){
-            let keyWord = event.target.dataset.value;
-            const filterRecipes = recipes.filter(recipe => {
-                return recipe.appliance === keyWord;
+        if(filters.ingredients.length) {
+            const ingredientExists = recipe.ingredients.find(ingredient => {
+                const ingredientName = ingredient.ingredient;
+                return filters.ingredients.includes(ingredientName);
             })
-            displayData(filterRecipes)
+            console.log(ingredientExists)
+            if(ingredientExists === undefined) {
+                return false;
+            }
+        }
+
+        if(filters.ustensils.length) {
+            const ustensilExists = recipe.ustensils.find(ustensil => {
+                return filters.ustensils.includes(ustensil);
+            })
+
+            if(ustensilExists === undefined) {
+                return false;
+            }
+        }
+        return true
+    })
+   return filteredRecipes;
+} 
+
+function valueKeyWord() {
+    let keyWords = document.querySelectorAll(".item");
+
+    keyWords.forEach((keyWord) => {
+    keyWord.addEventListener("click", function(event) {
+        const keyWordType = event.target.dataset.type;
+        const value = event.target.dataset.value;
+
+        if(keyWordType === "appareil") {
+            filters.appliance = value;
+        }
+
+        if(keyWordType === "ingredient") {
+            filters.ingredients.push(value);
+        }
+
+        if(keyWordType === "ustensil") {
+            filters.ustensils.push(value);
+        }
+
+        const recipesToDisplay = filterRecipes(recipes);
+        displayData(recipesToDisplay);
         })
     })
-} 
+}
 

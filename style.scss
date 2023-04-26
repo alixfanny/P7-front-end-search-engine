@@ -52,6 +52,10 @@ header{
                 display: none;
             }
 
+            .desactivated{
+                margin-right: 20px;
+            }
+
             &.show{
                 .activated{
                     display: block;

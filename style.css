@@ -45,6 +45,9 @@ header h1 {
 .menu-dropdown .dropdown .dropdown-toggle .activated {
   display: none;
 }
+.menu-dropdown .dropdown .dropdown-toggle .desactivated {
+  margin-right: 20px;
+}
 .menu-dropdown .dropdown .dropdown-toggle.show .activated {
   display: block;
 }
