@@ -86,11 +86,17 @@ header{
   }
 
 .tag{
-    background: aliceblue;
-    width: 107px;
     text-align: center;
     border-radius: 5px;
     color: white;
+    margin-right: 5px;
+    padding: 0px 5px 0px 5px;
+
+    .close{
+        font-size: 12px;
+        margin-left: 5px;
+        cursor: pointer;
+    }
 }
 
 .recipe{
