@@ -12,12 +12,12 @@ const tagsPlace = document.querySelector(".tags");
 // Exécute les fonctions pour initialiser l'application
 async function init() {
     const recipes = await getRecipes(); 
-    displayData(recipes); 
-    afficheMenuDropdown();             
-    filterRecipes();                    
-    eventDropdown();                        
+    displayRecipes(recipes); 
+    displayDropdownMenus();             
+    applyFilters();                    
+    setupDropdownEvents();                        
    // ecrireDansDropdown();
-    toggleArrowRotation();
+    setupArrowRotation();
 }
 
 init();
@@ -31,20 +31,20 @@ async function getRecipes() {
 }
 
 // Affiche les recettes sur la page
-function displayData(recipes) {                                            
+function displayRecipes(recipes) {                                            
     const recipesSection = document.querySelector(".container-recette");
     recipesSection.innerHTML = " ";
 
     recipes.forEach((recipe) => {
-        const domRecipe = recipeFactory(recipe);
+        const domRecipe = createRecipeElement(recipe);
         const userCardDOM = domRecipe.getUserCardDOM();                     
         recipesSection.appendChild(userCardDOM);
     });
-    remplieLesTableauPourAfficherLiDesDropdown(recipes)
+    populateDropdownArrays(recipes)
 }
 
 // Crée un élément DOM pour une recette
-function recipeFactory(data) {
+function createRecipeElement(data) {
     const {id, name, description, ingredients, time, portrait} = data;
     const picture = `media/${portrait}`;
 
@@ -124,7 +124,7 @@ function recipeFactory(data) {
 }
 
 // Remplit les tableaux pour les menus déroulants
-function remplieLesTableauPourAfficherLiDesDropdown(recipes) {
+function populateDropdownArrays(recipes) {
     recipes.forEach((recipe) => {
         recipe.ingredients.forEach((ingredient) => {
            if(!allIngredients.includes(ingredient.ingredient)){
@@ -152,7 +152,7 @@ function remplieLesTableauPourAfficherLiDesDropdown(recipes) {
 }
 
 // Affiche les menus déroulants sans filtres
-function afficheMenuDropdown(){
+function displayDropdownMenus(){
     const ulIngredient = document.getElementById("dropdown_menu_ingredients");
     const ulAppliance = document.getElementById("dropdown_menu_appliance");
     const ulUstensil = document.getElementById("dropdown_menu_ustensils");
@@ -190,7 +190,7 @@ function afficheMenuDropdown(){
 }
 
 // Filtre les recettes en fonction de l'objet filters
-function filterRecipes() {
+function applyFilters() {
     const filteredRecipes = recipes.filter(recipe => {
         if(filters.appliance !== "" && recipe.appliance !== filters.appliance) {
             return false;
@@ -222,7 +222,7 @@ function filterRecipes() {
 } 
 
 // Récupère la valeur de l'élément sélectionné et met à jour l'objet filters
-function valueKeyWord(event) {
+function updateFilters(event) {
 
     const keyWordType = event.target.dataset.type;
     const value = event.target.dataset.value;
@@ -239,12 +239,12 @@ function valueKeyWord(event) {
         filters.ustensils.push(value);
     }
 
-    const recipesToDisplay = filterRecipes(recipes);
-    displayData(recipesToDisplay);
+    const recipesToDisplay = applyFilters(recipes);
+    displayRecipes(recipesToDisplay);
 } 
 
 // Affiche le tag sélectionné à partir des menus déroulants
-function attachTags(event) {
+function displaySelectedTag(event) {
   
     const value = event.target.dataset.value;           
     const keyWordType = event.target.dataset.type;
@@ -274,23 +274,23 @@ function attachTags(event) {
     p.appendChild(close);
     tagsPlace.appendChild(p);
 
-    deleteTags()
+    removeTag()
 }
 
 // Configure les événements pour les menus déroulants
-function eventDropdown() {
+function setupDropdownEvents() {
     let keyWords = document.querySelectorAll(".item"); 
 
     keyWords.forEach((keyWord) => {                             
         keyWord.addEventListener("click", function(event) {
-            valueKeyWord(event);
-            attachTags(event);
+            updateFilters(event);
+            displaySelectedTag(event);
         })
     })
 }
 
 // Supprime un tag et met à jour les filtres
-function deleteTags() {
+function removeTag() {
     let closeItems = document.querySelectorAll(".close");
   
     closeItems.forEach((item) => {
@@ -323,8 +323,8 @@ function deleteTags() {
                 })
             }
 
-            const recipesToDisplay = filterRecipes(recipes);
-            displayData(recipesToDisplay);
+            const recipesToDisplay = applyFilters(recipes);
+            displayRecipes(recipesToDisplay);
         });
     });
 }
@@ -340,7 +340,7 @@ function deleteTags() {
 }*/
 
 // Configure la rotation de la flèche pour les menus déroulants
-function toggleArrowRotation() {
+function setupArrowRotation() {
     const arrows = document.querySelectorAll(".my-toggle");
     arrows.forEach((arrow) => {
       arrow.addEventListener("click", function() {
