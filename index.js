@@ -15,9 +15,10 @@ async function init() {
     displayRecipes(recipes); 
     displayDropdownMenus();             
     applyFilters();                    
-    setupDropdownEvents();                        
-   // ecrireDansDropdown();
+    setupDropdownEvents();
     setupArrowRotation();
+    setupDropdownFocus();
+    filterKeywordInput();
 }
 
 init();
@@ -329,16 +330,6 @@ function removeTag() {
     });
 }
 
-/*function ecrireDansDropdown() {
-    const input = document.querySelector(".dropdown-search-field");
-
-    input.addEventListener("click", function(event) {
-        const button = document.querySelector(".dropdown-toggle");
-        button.setAttribute("type", "text");
-        button.stopPropagation();
-    })
-}*/
-
 // Configure la rotation de la flèche pour les menus déroulants
 function setupArrowRotation() {
     const arrows = document.querySelectorAll(".my-toggle");
@@ -347,4 +338,71 @@ function setupArrowRotation() {
         arrow.classList.toggle("rotated");
         })  
     })
+
+    const items = document.querySelectorAll(".item");
+    items.forEach((item) => {
+        item.addEventListener("click", function() {
+            arrows.forEach((arrow) => {
+                arrow.classList.remove("rotated");
+            })
+        })
+    })
+}
+
+//Gère le focus des éléments input à l'intérieur des dropdowns Bootstrap.
+function setupDropdownFocus() {
+    const dropdowns = document.querySelectorAll(".dropdown");
+
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener("show.bs.dropdown", function (event) {
+            setTimeout(() => {
+                const input = dropdown.querySelector("input");                   // attention beug dans cette fonction sa empeche a la drop de se refermer
+                if (input) {
+                    input.focus();
+                }
+            }, 0);
+        });                                                                         
+
+        const dropdownMenu = dropdown.querySelector(".dropdown-menu");
+        if (dropdownMenu) {
+            dropdownMenu.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+        }
+    });
+}
+document.addEventListener("DOMContentLoaded", function () {
+    setupDropdownFocus();
+});
+
+function filterKeywordInput() {
+    const inputElements = document.querySelectorAll(".dropdown-search-field");
+                                                                               // la fonction fais son taff mais je vois pas comment modifier l'affichage
+    inputElements.forEach((inputElement) => {
+        inputElement.addEventListener("input", function(event) {
+        const champ = event.target.getAttribute('champ');
+        const value = event.target.value;
+
+            if(champ === "ingredient") {
+                const filteredIngredients = allIngredients.filter(ingredient =>
+                    ingredient.toLowerCase().includes(value.toLowerCase())
+                );
+                displayDropdownMenus(filteredIngredients, allAppliances, allUstensils);
+            }
+
+            if(champ === "appareil") {
+                const filteredAppliances = allAppliances.filter(appliance =>
+                    appliance.toLowerCase().includes(value.toLowerCase())
+                );
+                displayDropdownMenus(allIngredients, filteredAppliances, allUstensils);
+            }
+
+            if(champ === "ustensil") {
+                const filteredUstensils = allUstensils.filter(ustensil =>
+                    ustensil.toLowerCase().includes(value.toLowerCase())
+                );
+                displayDropdownMenus(allIngredients, allAppliances, filteredUstensils);
+            }
+        })
+    });
 }
