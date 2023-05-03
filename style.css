@@ -42,6 +42,9 @@ header h1 {
   color: white;
   align-items: center;
 }
+.menu-dropdown .dropdown .dropdown-toggle::after {
+  content: none;
+}
 .menu-dropdown .dropdown .dropdown-toggle .activated {
   display: none;
 }
@@ -53,6 +56,20 @@ header h1 {
 }
 .menu-dropdown .dropdown .dropdown-toggle.show .desactivated {
   display: none;
+}
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 0.3em solid transparent;
+  border-right: 0.3em solid transparent;
+  border-top: 0.3em solid;
+  transition: transform 0.3s ease;
+}
+
+.my-toggle.rotated .arrow {
+  transform: rotate(180deg);
 }
 
 .dropdown-search-field {

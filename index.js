@@ -1,70 +1,52 @@
-let recipes = [];           // cette variable stock un tableau vide mais servira plus tard dans le code pour stocker toutes les recettes donc le Json.
-let allIngredients = [];    // cette variable stock un tableau vide mais servira plus tard dans le code pour stocker tous les ingredients de chaqu'une des recettes.
-let allAppliances = [];     // cette variable stock un tableau vide mais servira plus tard dans le code pour stocker tous les appareils de chaqu'une des recettes.
-let allUstensils = [];      // cette variable stock un tableau vide mais servira plus tard dans le code pour stocker tous les ustensils de chaqu'une des recettes.
-let filters = {             // cette variable stock un objet avec trois proprietes 1 chaine de caractéres et 2 tableau vide,
-    appliance: "",          // mais servira plus tard dans le code pour stocker les mots cles choissis par l'utilisateur.
+let recipes = [];
+let allIngredients = [];
+let allAppliances = [];
+let allUstensils = [];
+let filters = {
+    appliance: "",
     ingredients: [],
     ustensils: [],
 }
+const tagsPlace = document.querySelector(".tags");
 
-async function init() {                        // la function init est une fonction async car elle attend de recevoir le return de la function getRecipes().
-    const recipes = await getRecipes();        // elle permet de lancer les affichages de la page web et detrmine l'ordre d'execution des fonctions.
-    displayData(recipes);
-    afficheMenuDropdown();
-    valueKeyWord();
-    filterRecipes();
-    attachTags();
+// Exécute les fonctions pour initialiser l'application
+async function init() {
+    const recipes = await getRecipes(); 
+    displayData(recipes); 
+    afficheMenuDropdown();             
+    filterRecipes();                    
+    eventDropdown();                        
+   // ecrireDansDropdown();
+    toggleArrowRotation();
 }
 
-init();                                               // j'appelle la fonction init pour lancer la page web.
+init();
 
-async function getRecipes() {                       // la function getRecipes() me permet de récupere les données du fichier Json en utilisant la fonction fetch()
-    let response = await fetch('./recipes.json');   // et de stocker cette reponse dans la variable recipes.
+// Récupère les recettes depuis le fichier JSON
+async function getRecipes() {
+    let response = await fetch('./recipes.json');
     recipes = await response.json();
 
     return recipes
 }
 
+// Affiche les recettes sur la page
 function displayData(recipes) {                                            
-    const recipesSection = document.querySelector(".container-recette");    // la function displayData() permet d'afficher les recherches dans la page web.
-    recipesSection.innerHTML = " ";                                         // je vide la section pour que lors du filtrage uniquement les recette seltectionner s'affiche.
+    const recipesSection = document.querySelector(".container-recette");
+    recipesSection.innerHTML = " ";
 
-    recipes.forEach((recipe) => {                                           // je fais une boucle avec la fonction forEach() pour qu'elle applique les functions
-        const domRecipe = recipeFactory(recipe);                            // recipeFActory et getUserCardDOM() sur chaqu'une des recettes.
+    recipes.forEach((recipe) => {
+        const domRecipe = recipeFactory(recipe);
         const userCardDOM = domRecipe.getUserCardDOM();                     
-        recipesSection.appendChild(userCardDOM);                            // et chaque recette soit un enfant de la section selectionner.
+        recipesSection.appendChild(userCardDOM);
     });
-
-    recipes.forEach((recipe) => {                                   // je fais une boucle sur les recettes pour que sur chaque recette on fasse une boucle sur chaque ingredient
-        recipe.ingredients.forEach((ingredient) => {                // pour vérifier que cette ingredient ne soit pas dans le tableau allIngredients avec la function include() 
-           if(!allIngredients.includes(ingredient.ingredient)){     // et pouvoir l'ajouter avec la function push()
-            allIngredients.push(ingredient.ingredient)              // en francais: dans le tableaux recipes sur chaque recette va dans son tableau ingredients et sur chaque ingredient de ce tableau,
-           }                                                        // vérifie que dans allIngredient il n'y soit pas, si il n'y est pas ajoute le sinon ne fais rien et passe au suivant.
-        })
-        return allIngredients
-    });
-
-    recipes.forEach((recipe) => {
-        if(!allAppliances.includes(recipe.appliance)){
-            allAppliances.push(recipe.appliance)
-        }
-        return allAppliances
-    });
-
-    recipes.forEach((recipe) => {
-        recipe.ustensils.forEach((ustensil) => {
-           if(!allUstensils.includes(ustensil)){
-            allUstensils.push(ustensil)
-           }
-        })
-        return allUstensils
-    })
+    remplieLesTableauPourAfficherLiDesDropdown(recipes)
 }
 
+// Crée un élément DOM pour une recette
 function recipeFactory(data) {
-    const {id, name, description, ingredients, time, portrait} = data;          // permet de exploser un objet content plusieurs variable extraite de recipes
-    const picture = `media/${portrait}`;                                        // permet de stocker le chemin des photo
+    const {id, name, description, ingredients, time, portrait} = data;
+    const picture = `media/${portrait}`;
 
     function getUserCardDOM() {
         const article = document.createElement( 'article' );
@@ -103,18 +85,18 @@ function recipeFactory(data) {
 
 
         const pIngredients = document.createElement( 'div' );                 
-        ingredients.forEach(function(ingredient){                       //on fait une boucle sur chaque ingredient du tableau ingredients
+        ingredients.forEach(function(ingredient){
             const ingredientEl = document.createElement('div');
             const ingredientRecipe = ingredient.ingredient;
 
-            if(ingredient.unit && ingredient.quantity){         // si dans le tableau il y a des unite et des quantiter alors affiche ca 
+            if(ingredient.unit && ingredient.quantity){
                 ingredientEl.innerHTML = '<strong>' + ingredientRecipe + '</strong>' + ": " + ingredient.quantity +" " + ingredient.unit;
             }
-            else if(ingredient.quantity){                       // si dans le tableau il y a des quantiter alors affiche ca 
+            else if(ingredient.quantity){
                 ingredientEl.innerHTML = '<strong>' + ingredientRecipe + '</strong>' + ": " + ingredient.quantity;
             }
 
-            else {                                              // sinon affiche ca 
+            else {
                 ingredientEl.innerHTML = '<strong>' + ingredientRecipe + '</strong>';
             }
             pIngredients.appendChild(ingredientEl);
@@ -141,17 +123,46 @@ function recipeFactory(data) {
     return {getUserCardDOM}
 }
 
+// Remplit les tableaux pour les menus déroulants
+function remplieLesTableauPourAfficherLiDesDropdown(recipes) {
+    recipes.forEach((recipe) => {
+        recipe.ingredients.forEach((ingredient) => {
+           if(!allIngredients.includes(ingredient.ingredient)){
+            allIngredients.push(ingredient.ingredient)
+           }
+        })
+        return allIngredients
+    });
+
+    recipes.forEach((recipe) => {
+        if(!allAppliances.includes(recipe.appliance)){
+            allAppliances.push(recipe.appliance)
+        }
+        return allAppliances
+    });
+
+    recipes.forEach((recipe) => {
+        recipe.ustensils.forEach((ustensil) => {
+           if(!allUstensils.includes(ustensil)){
+            allUstensils.push(ustensil)
+           }
+        })
+        return allUstensils
+    })
+}
+
+// Affiche les menus déroulants sans filtres
 function afficheMenuDropdown(){
     const ulIngredient = document.getElementById("dropdown_menu_ingredients");
     const ulAppliance = document.getElementById("dropdown_menu_appliance");
     const ulUstensil = document.getElementById("dropdown_menu_ustensils");
     let numberMax =  0;
 
-    allIngredients.forEach((ingredient) => {                            // fait une boucle sur chaque element du tableau allIngredients 
-        if(numberMax < 30){                                             // et pour chaque element fait numberMax + 1
+    allIngredients.forEach((ingredient) => {
+        if(numberMax < 30){
             numberMax ++;
-            const liIngredient = document.createElement('li');          // html cree un li
-            liIngredient.textContent = ingredient;                      // arrete toi a 30 ingredient
+            const liIngredient = document.createElement('li');
+            liIngredient.textContent = ingredient;
             liIngredient.setAttribute("data-value", ingredient);
             liIngredient.setAttribute("data-type", "ingredient");
             liIngredient.classList.add("item")
@@ -178,19 +189,20 @@ function afficheMenuDropdown(){
     });
 }
 
+// Filtre les recettes en fonction de l'objet filters
 function filterRecipes() {
-    const filteredRecipes = recipes.filter(recipe => {                              // sur le tableau recipes filtre dans chaque recette
-        if(filters.appliance !== "" && recipe.appliance !== filters.appliance) {    // si l'appareil selectioner n'est pas vide et ne correspond pas a l'appareil d'une des recette
-            return false;                                                           // return false 
+    const filteredRecipes = recipes.filter(recipe => {
+        if(filters.appliance !== "" && recipe.appliance !== filters.appliance) {
+            return false;
         }
 
-        if(filters.ingredients.length) {                                            // si le tableau ingredients dans l'objet filters n'est pas vide 
-            const ingredientExists = recipe.ingredients.find(ingredient => {        // cherche dans le tableau d'ingredients l'ingredient qui correspond
-                const ingredientName = ingredient.ingredient;                       // sur chaqu'un stock le dans ingredientName
-                return filters.ingredients.includes(ingredientName);                // verifie que ingredientName est ou n'est pas 
+        if(filters.ingredients.length) {
+            const ingredientExists = recipe.ingredients.find(ingredient => {
+                const ingredientName = ingredient.ingredient;
+                return filters.ingredients.includes(ingredientName);
             })
 
-            if(ingredientExists === undefined) {                                    // si le function find resort un defined ne fait rien 
+            if(ingredientExists === undefined) {
                 return false;
             }
         }
@@ -204,77 +216,80 @@ function filterRecipes() {
                 return false;
             }
         }
-        return true         // si un des if return true alors return true
+        return true
     })
    return filteredRecipes;
 } 
 
-function valueKeyWord() {
-    let keyWords = document.querySelectorAll(".item");
+// Récupère la valeur de l'élément sélectionné et met à jour l'objet filters
+function valueKeyWord(event) {
 
-    keyWords.forEach((keyWord) => {                             // dans le tableau keyWords boucle sur chaque li et sur le li ou un click a etais fait
-    keyWord.addEventListener("click", function(event) {         // fait que si le type est stritement égal a "...." alors sa valeur sera dans la chaine de caretere de l'objet filters
-        const keyWordType = event.target.dataset.type;
-        const value = event.target.dataset.value;
+    const keyWordType = event.target.dataset.type;
+    const value = event.target.dataset.value;
 
-        if(keyWordType === "appareil") {
-            filters.appliance = value;
-        }
+    if(keyWordType === "appareil") {
+        filters.appliance = value;
+    }
 
-        if(keyWordType === "ingredient") {                      // fait que si le type est stritement égal a "...." alors la valeur sera ajouter au tableau ingredients de l'objet filters
-            filters.ingredients.push(value);
-        }
+    if(keyWordType === "ingredient") {
+        filters.ingredients.push(value);
+    }
 
-        if(keyWordType === "ustensil") {
-            filters.ustensils.push(value);
-        }
+    if(keyWordType === "ustensil") {
+        filters.ustensils.push(value);
+    }
 
-        const recipesToDisplay = filterRecipes(recipes);        // on appele la function displayData avec comme paramétre(recipesToDisplay) pour afficher les donnes filtrer
-        displayData(recipesToDisplay);
-        })
-    })
+    const recipesToDisplay = filterRecipes(recipes);
+    displayData(recipesToDisplay);
 } 
 
-const tagsPlace = document.querySelector(".tags");
+// Affiche le tag sélectionné à partir des menus déroulants
+function attachTags(event) {
+  
+    const value = event.target.dataset.value;           
+    const keyWordType = event.target.dataset.type;
+    const p = document.createElement('p');
+    const close = document.createElement('i');      
 
-function attachTags() {
+    if(keyWordType === "appareil") {             
+        p.setAttribute("style", "background-color: #68D9A4");
+        close.setAttribute("data-type", "appareil");
+    }
+
+    if(keyWordType === "ingredient") {
+        p.setAttribute("style", "background-color: #3282f7");
+        close.setAttribute("data-type", "ingredient");
+    }
+
+    if(keyWordType === "ustensil") {
+        p.setAttribute("style", "background-color: #ED6454");
+        close.setAttribute("data-type", "ustensil");
+    }
+
+    p.textContent = value;
+    p.classList.add("tag");
+    p.setAttribute("data-delete", value);
+    close.classList.add("close", "fa-regular", "fa-circle-xmark");
+    close.setAttribute("data-value", value);
+    p.appendChild(close);
+    tagsPlace.appendChild(p);
+
+    deleteTags()
+}
+
+// Configure les événements pour les menus déroulants
+function eventDropdown() {
     let keyWords = document.querySelectorAll(".item"); 
 
     keyWords.forEach((keyWord) => {                             
-        keyWord.addEventListener("click", function(event) {    
-            const value = event.target.dataset.value;           
-            const keyWordType = event.target.dataset.type;
-            const p = document.createElement('p');
-            const close = document.createElement('i');      
-
-            if(keyWordType === "appareil") {             
-                p.setAttribute("style", "background-color: #68D9A4");
-                close.setAttribute("data-type", "appareil");
-            }
-
-            if(keyWordType === "ingredient") {
-                p.setAttribute("style", "background-color: #3282f7");
-                close.setAttribute("data-type", "ingredient");
-            }
-
-            if(keyWordType === "ustensil") {
-                p.setAttribute("style", "background-color: #ED6454");
-                close.setAttribute("data-type", "ustensil");
-            }
-
-            p.textContent = value;
-            p.classList.add("tag");
-            p.setAttribute("data-delete", value);
-            close.classList.add("close", "fa-regular", "fa-circle-xmark");
-            close.setAttribute("data-value", value);
-            p.appendChild(close);
-            tagsPlace.appendChild(p);
-
-            deleteTags()
-        })                                
+        keyWord.addEventListener("click", function(event) {
+            valueKeyWord(event);
+            attachTags(event);
+        })
     })
 }
 
+// Supprime un tag et met à jour les filtres
 function deleteTags() {
     let closeItems = document.querySelectorAll(".close");
   
@@ -282,14 +297,12 @@ function deleteTags() {
         item.addEventListener("click", function(event) {
             const value = event.target.dataset.value;           
             const keyWordType = event.target.dataset.type;
-    
-            // Supprime le tag de l'affichage
+
             const deleteTag = document.querySelector(`[data-delete="${value}"]`);
             if (deleteTag) {
                 deleteTag.remove();
             }
     
-            // Supprime le filtre correspondant
             if (keyWordType === "appareil") {
             filters.appliance = "";
             }
@@ -310,9 +323,28 @@ function deleteTags() {
                 })
             }
 
-            // Met à jour la liste de recettes filtrées
             const recipesToDisplay = filterRecipes(recipes);
             displayData(recipesToDisplay);
         });
     });
+}
+
+/*function ecrireDansDropdown() {
+    const input = document.querySelector(".dropdown-search-field");
+
+    input.addEventListener("click", function(event) {
+        const button = document.querySelector(".dropdown-toggle");
+        button.setAttribute("type", "text");
+        button.stopPropagation();
+    })
+}*/
+
+// Configure la rotation de la flèche pour les menus déroulants
+function toggleArrowRotation() {
+    const arrows = document.querySelectorAll(".my-toggle");
+    arrows.forEach((arrow) => {
+      arrow.addEventListener("click", function() {
+        arrow.classList.toggle("rotated");
+        })  
+    })
 }
