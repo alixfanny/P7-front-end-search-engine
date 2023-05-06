@@ -19,7 +19,6 @@ async function init() {
     setupArrowRotation();
     setupDropdownFocus();
     filterKeywordInput();
-    closeDropdown();
 }
 // Récupère les recettes depuis le fichier JSON
 async function getRecipes() {
@@ -189,6 +188,7 @@ function displayDropdownMenus(filteredIngredients = allIngredients, filteredAppl
         liUstensil.classList.add("item")
         ulUstensil.appendChild(liUstensil);
     });
+    closeDropdown();
 }
 
 // Filtre les recettes en fonction de l'objet filters
@@ -199,12 +199,14 @@ function applyFilters() {
         }
 
         if(filters.ingredients.length) {
-            const ingredientExists = recipe.ingredients.find(ingredient => {
-                const ingredientName = ingredient.ingredient;
-                return filters.ingredients.includes(ingredientName);
+            const allIngredientsExist = filters.ingredients.every(filterIngredient => {
+                return recipe.ingredients.some(ingredient => {
+                    const ingredientName = ingredient.ingredient;
+                    return ingredientName === filterIngredient;
+                })
             })
 
-            if(ingredientExists === undefined) {
+            if(!allIngredientsExist) {
                 return false;
             }
         }
@@ -251,7 +253,12 @@ function displaySelectedTag(event) {
     const value = event.target.dataset.value;           
     const keyWordType = event.target.dataset.type;
     const p = document.createElement('p');
-    const close = document.createElement('i');      
+    const close = document.createElement('i');    
+    
+    const existingTag = document.querySelector('.tag[data-delete="${value}"]');
+    if (existingTag) {
+        return
+    }
 
     if(keyWordType === "appareil") {             
         p.setAttribute("style", "background-color: #68D9A4");
@@ -287,6 +294,11 @@ function setupDropdownEvents() {
         keyWord.addEventListener("click", function(event) {
             updateFilters(event);
             displaySelectedTag(event);
+
+            const inputElement = event.target.closest(".dropdown").querySelector("input");
+            if (inputElement) {
+                inputElement.value = "";
+            }
         })
     })
 }
@@ -311,17 +323,13 @@ function removeTag() {
 
             if(keyWordType === "ingredient"){
                 filters.ingredients = filters.ingredients.filter(ingredient => {
-                    if(ingredient !== value) {
-                        return false
-                    }
+                    return ingredient !== value;
                 })
             }
 
             if(keyWordType === "ustensil"){
                 filters.ustensils = filters.ustensils.filter(ustensil => {
-                    if(ustensil !== value) {
-                        return false
-                    }
+                    return ustensil !== value;
                 })
             }
 
@@ -389,9 +397,10 @@ function closeDropdown() {
     })
 }
 
+//Filtre les dropdown avec la valeur de l'input
 function filterKeywordInput() {
     const inputElements = document.querySelectorAll(".dropdown-search-field");
-                                                                               // la fonction fais son taff mais je vois pas comment modifier l'affichage
+
     inputElements.forEach((inputElement) => {
         inputElement.addEventListener("input", function(event) {
         const champ = event.target.getAttribute('champ');

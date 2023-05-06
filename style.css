@@ -75,6 +75,7 @@ header h1 {
 .dropdown-search-field {
   border: none;
   color: white;
+  width: 250px;
 }
 .dropdown-search-field:focus {
   outline: none;
