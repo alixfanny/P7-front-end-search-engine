@@ -90,6 +90,12 @@ header{
 .dropdown-search-field{
     border: none;
     color: white;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border-color: transparent;
+    }
 }
 
 .dropdown-menu.show {

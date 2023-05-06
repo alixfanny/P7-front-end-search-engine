@@ -151,13 +151,14 @@ function populateDropdownArrays(recipes) {
 }
 
 // Affiche les menus déroulants sans filtres
-function displayDropdownMenus(){
+function displayDropdownMenus(filteredIngredients = allIngredients, filteredAppliances = allAppliances, filteredUstensils = allUstensils){
     const ulIngredient = document.getElementById("dropdown_menu_ingredients");
     const ulAppliance = document.getElementById("dropdown_menu_appliance");
     const ulUstensil = document.getElementById("dropdown_menu_ustensils");
     let numberMax =  0;
 
-    allIngredients.forEach((ingredient) => {
+    ulIngredient.innerHTML = ""; 
+    filteredIngredients.forEach((ingredient) => {
         if(numberMax < 30){
             numberMax ++;
             const liIngredient = document.createElement('li');
@@ -169,7 +170,8 @@ function displayDropdownMenus(){
         }
     });
 
-    allAppliances.forEach((appliance) => {
+    ulAppliance.innerHTML = "";
+    filteredAppliances.forEach((appliance) => {
         const liAppliance = document.createElement('li');
         liAppliance.textContent = appliance;
         liAppliance.setAttribute("data-value", appliance);
@@ -178,7 +180,8 @@ function displayDropdownMenus(){
         ulAppliance.appendChild(liAppliance);
     });
 
-    allUstensils.forEach((ustensil) => {
+    ulUstensil.innerHTML = "";
+    filteredUstensils.forEach((ustensil) => {
         const liUstensil = document.createElement('li');
         liUstensil.textContent = ustensil;
         liUstensil.setAttribute("data-value", ustensil);
@@ -399,6 +402,7 @@ function filterKeywordInput() {
                     ingredient.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(filteredIngredients, allAppliances, allUstensils);
+                setupDropdownEvents();
             }
 
             if(champ === "appareil") {
@@ -406,6 +410,7 @@ function filterKeywordInput() {
                     appliance.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(allIngredients, filteredAppliances, allUstensils);
+                setupDropdownEvents();
             }
 
             if(champ === "ustensil") {
@@ -413,9 +418,10 @@ function filterKeywordInput() {
                     ustensil.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(allIngredients, allAppliances, filteredUstensils);
+                setupDropdownEvents();
             }
         })
     });
 }
 
-init();
+init(); 
