@@ -402,6 +402,11 @@ function filterKeywordInput() {
     const inputElements = document.querySelectorAll(".dropdown-search-field");
 
     inputElements.forEach((inputElement) => {
+        inputElement.addEventListener("focus", function(event) {
+            displayDropdownMenus();
+            setupDropdownEvents();
+        });
+
         inputElement.addEventListener("input", function(event) {
         const champ = event.target.getAttribute('champ');
         const value = event.target.value;
@@ -432,5 +437,6 @@ function filterKeywordInput() {
         })
     });
 }
+
 
 init(); 
