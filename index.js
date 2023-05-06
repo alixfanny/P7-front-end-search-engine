@@ -19,10 +19,8 @@ async function init() {
     setupArrowRotation();
     setupDropdownFocus();
     filterKeywordInput();
+    closeDropdown();
 }
-
-init();
-
 // Récupère les recettes depuis le fichier JSON
 async function getRecipes() {
     let response = await fetch('./recipes.json');
@@ -356,7 +354,7 @@ function setupDropdownFocus() {
     dropdowns.forEach((dropdown) => {
         dropdown.addEventListener("show.bs.dropdown", function (event) {
             setTimeout(() => {
-                const input = dropdown.querySelector("input");                   // attention beug dans cette fonction sa empeche a la drop de se refermer
+                const input = dropdown.querySelector("input");
                 if (input) {
                     input.focus();
                 }
@@ -374,6 +372,19 @@ function setupDropdownFocus() {
 document.addEventListener("DOMContentLoaded", function () {
     setupDropdownFocus();
 });
+
+//Gère la fermeture du menu de la dropdown
+function closeDropdown() {
+    const items = document.querySelectorAll(".item");
+    items.forEach((item) => {
+        item.addEventListener("click", function(){
+            const menus = document.querySelectorAll(".dropdown-menu");
+            menus.forEach((menu) => {
+                menu.classList.remove("show");
+            })            
+        })
+    })
+}
 
 function filterKeywordInput() {
     const inputElements = document.querySelectorAll(".dropdown-search-field");
@@ -406,3 +417,5 @@ function filterKeywordInput() {
         })
     });
 }
+
+init();
