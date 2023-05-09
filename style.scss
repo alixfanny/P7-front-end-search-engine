@@ -73,6 +73,10 @@ header{
     }
 }
 
+.show-label {
+    display: block !important;
+}
+
 .arrow {
     display: inline-block;
     width: 0;
@@ -83,7 +87,7 @@ header{
     transition: transform 0.3s ease;
 }
 
-.my-toggle.rotated .arrow {
+.my-toggle .arrow.rotated{
     transform: rotate(180deg);
 }
 
@@ -109,7 +113,11 @@ header{
     li{
         cursor: pointer;
     }
-  }
+}
+
+.error-message{
+    margin: 0px;
+}
 
 .tag{
     text-align: center;

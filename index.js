@@ -33,11 +33,16 @@ function displayRecipes(recipes) {
     const recipesSection = document.querySelector(".container-recette");
     recipesSection.innerHTML = " ";
 
-    recipes.forEach((recipe) => {
-        const domRecipe = createRecipeElement(recipe);
-        const userCardDOM = domRecipe.getUserCardDOM();                     
-        recipesSection.appendChild(userCardDOM);
-    });
+    if(recipes.length === 0) {
+        displayErrorMessage(recipesSection, true);
+    } else {
+        displayErrorMessage(recipesSection, false);
+        recipes.forEach((recipe) => {
+            const domRecipe = createRecipeElement(recipe);
+            const userCardDOM = domRecipe.getUserCardDOM();                     
+            recipesSection.appendChild(userCardDOM);
+        });
+    }
     populateDropdownArrays(recipes)
 }
 
@@ -253,12 +258,7 @@ function displaySelectedTag(event) {
     const value = event.target.dataset.value;           
     const keyWordType = event.target.dataset.type;
     const p = document.createElement('p');
-    const close = document.createElement('i');    
-    
-    const existingTag = document.querySelector('.tag[data-delete="${value}"]');
-    if (existingTag) {
-        return
-    }
+    const close = document.createElement('i');
 
     if(keyWordType === "appareil") {             
         p.setAttribute("style", "background-color: #68D9A4");
@@ -283,6 +283,13 @@ function displaySelectedTag(event) {
     p.appendChild(close);
     tagsPlace.appendChild(p);
 
+    const inputElement = event.target.closest(".dropdown").querySelector("input");
+    const desactivated = event.target.closest(".dropdown").querySelector(".desactivated");
+    if (inputElement && desactivated) {
+        inputElement.style.display = "none";
+        desactivated.classList.add("show-label");
+    }
+
     removeTag()
 }
 
@@ -293,14 +300,31 @@ function setupDropdownEvents() {
     keyWords.forEach((keyWord) => {                             
         keyWord.addEventListener("click", function(event) {
             updateFilters(event);
-            displaySelectedTag(event);
+
+            if(!tagExists(event.target.dataset.value)) {
+                displaySelectedTag(event);
+            }
 
             const inputElement = event.target.closest(".dropdown").querySelector("input");
             if (inputElement) {
                 inputElement.value = "";
             }
+
         })
     })
+}
+
+function tagExists(value) {
+    const existingTags = document.querySelectorAll(".tag");
+    let tagExists = false;
+
+    existingTags.forEach((tag) => {
+        if (tag.getAttribute("data-delete") === value) {
+            tagExists = true;
+        }
+    });
+
+    return tagExists;
 }
 
 // Supprime un tag et met à jour les filtres
@@ -341,16 +365,20 @@ function removeTag() {
 
 // Configure la rotation de la flèche pour les menus déroulants
 function setupArrowRotation() {
-    const arrows = document.querySelectorAll(".my-toggle");
-    arrows.forEach((arrow) => {
-      arrow.addEventListener("click", function() {
-        arrow.classList.toggle("rotated");
+    const arrows = document.querySelectorAll(".arrow");
+    const toggles = document.querySelectorAll(".my-toggle");
+    toggles.forEach((toggle) => {
+        toggle.addEventListener("click", function() {
+            arrows.forEach((arrow) => {
+                arrow.classList.toggle("rotated");
+            })
         })  
     })
 
     const items = document.querySelectorAll(".item");
     items.forEach((item) => {
-        item.addEventListener("click", function() {
+        item.addEventListener("click", function(event) {
+            event.stopPropagation();
             arrows.forEach((arrow) => {
                 arrow.classList.remove("rotated");
             })
@@ -408,15 +436,16 @@ function filterKeywordInput() {
         });
 
         inputElement.addEventListener("input", function(event) {
-        const champ = event.target.getAttribute('champ');
-        const value = event.target.value;
-
+            const champ = event.target.getAttribute('champ');
+            const value = event.target.value;
+            const dropdownMenu = event.target.closest(".dropdown").querySelector(".dropdown-menu");
+            
             if(champ === "ingredient") {
                 const filteredIngredients = allIngredients.filter(ingredient =>
                     ingredient.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(filteredIngredients, allAppliances, allUstensils);
-                setupDropdownEvents();
+                displayErrorMessage(dropdownMenu, filteredIngredients.length === 0);
             }
 
             if(champ === "appareil") {
@@ -424,7 +453,7 @@ function filterKeywordInput() {
                     appliance.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(allIngredients, filteredAppliances, allUstensils);
-                setupDropdownEvents();
+                displayErrorMessage(dropdownMenu, filteredAppliances.length === 0);
             }
 
             if(champ === "ustensil") {
@@ -432,11 +461,27 @@ function filterKeywordInput() {
                     ustensil.toLowerCase().includes(value.toLowerCase())
                 );
                 displayDropdownMenus(allIngredients, allAppliances, filteredUstensils);
-                setupDropdownEvents();
+                displayErrorMessage(dropdownMenu, filteredUstensils.length === 0);
             }
+            setupDropdownEvents();
         })
-    });
+    })
 }
 
+function displayErrorMessage(dropdownMenu, shouldDisplay) {
+    let errorMessage = dropdownMenu.querySelector(".error-message");
+    if (!errorMessage) {
+        errorMessage = document.createElement("p");
+        errorMessage.classList.add("error-message");
+        errorMessage.textContent = "Aucun élément trouvé";
+        dropdownMenu.appendChild(errorMessage);
+    }
+
+    if (shouldDisplay) {
+        errorMessage.style.display = "block";
+    } else {
+        errorMessage.style.display = "none";
+    }
+}
 
 init(); 
