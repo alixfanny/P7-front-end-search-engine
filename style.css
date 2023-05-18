@@ -30,6 +30,7 @@ header h1 {
 .navbar .input-group #basic-addon1 {
   border: none;
   background: #E7E7E7;
+  cursor: pointer;
 }
 
 .menu-dropdown {
@@ -119,6 +120,7 @@ header h1 {
   max-height: 400px;
   height: 400px !important;
   border-radius: 0px 0px 5px 5px;
+  cursor: pointer;
 }
 .recipe .img-recipe {
   border-radius: 5px 5px 0px 0px;

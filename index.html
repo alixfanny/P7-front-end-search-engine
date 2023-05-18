@@ -39,13 +39,13 @@
                             <div class="dropdown">
                                 <button class="my-toggle btn dropdown-toggle d-flex" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-auto-close="false" style="background-color: #3282f7">
                                     <div class="activated">
-                                        <input class="dropdown-search-field" id="input-group-ingredient" type="text" champ="ingredient" placeholder="Rechercher un ingrédient" style="background-color: #3282f7">
+                                        <input class="dropdown-search-field" id="input-group-ingredient" onclick="setupArrowRotation()" type="text" champ="ingredient" placeholder="Rechercher un ingrédient" style="background-color: #3282f7">
                                     </div>
 
                                     <div class="desactivated">
                                         <label for="input-group-ingredient">Ingrédients </label>
                                     </div>
-                                    <span class="arrow" aria-hidden="true"></span>
+                                    <span class="arrow arrow-ingredient" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu grid-container " id="dropdown_menu_ingredients" style="background-color: #3282f7" >
                                 </ul>
@@ -59,7 +59,7 @@
                                     <div class="desactivated">
                                         <label for="input-group-appliance">Appareils</label>
                                     </div>
-                                    <span class="arrow" aria-hidden="true"></span>
+                                    <span class="arrow arrow-appliance" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu grid-container" id="dropdown_menu_appliance" style="background-color: #68D9A4">
                                 </ul>
@@ -73,7 +73,7 @@
                                     <div class="desactivated">
                                         <label for="input-group-ustensil">Ustensils</label>
                                     </div>
-                                    <span class="arrow" aria-hidden="true"></span>
+                                    <span class="arrow arrow-ustensil" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu grid-container" id="dropdown_menu_ustensils" style="background-color: #ED6454"> </ul>
                             </div>
@@ -89,4 +89,4 @@
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  </body>
+</body>
