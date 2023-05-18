@@ -533,36 +533,6 @@ function displayErrorMessage(dropdownMenu, shouldDisplay) {
 let searchBar = document.querySelector(".form-control");
 let recipesSection = document.querySelector(".container-recette");
 
-searchBar.addEventListener("input", (event) => {
-    let keyword = event.target.value.toLowerCase();
-
-    if (keyword.length >= 3) {
-        let filteredRecipes = recipes.filter(recipe => {
-            return (
-                recipe.name.toLowerCase().includes(keyword) ||
-                recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(keyword)) ||
-                recipe.description.toLowerCase().includes(keyword)
-            );
-        });
-
-        if (filteredRecipes.length > 0) {
-            displayRecipes(filteredRecipes);
-            displayErrorMessage(recipesSection, false);
-        }else {
-            recipesSection.innerHTML = "";
-            displayErrorMessage(recipesSection, true);
-        }
-    }else if (keyword.length === 0){
-        displayRecipes(recipes)
-        displayErrorMessage(recipesSection, false);
-    }else {
-        displayErrorMessage(recipesSection, false);  
-    }
-});
-
-/*let searchBar = document.querySelector(".form-control");
-let recipesSection = document.querySelector(".container-recette");
-
 searchBar.addEventListener("input", function(event) {
     let keyword = event.target.value.toLowerCase();
 
@@ -600,10 +570,12 @@ searchBar.addEventListener("input", function(event) {
             recipesSection.innerHTML = "";
             displayErrorMessage(recipesSection, true);
         }
-    } else {
-        recipesSection.innerHTML = "";
+    }else if (keyword.length === 0){
+        displayRecipes(recipes)
         displayErrorMessage(recipesSection, false);
+    }else {
+        displayErrorMessage(recipesSection, false);  
     }
-});*/
+});
 
 init(); 
